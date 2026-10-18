@@ -803,7 +803,7 @@ The results address four questions: whether refinement recovers the continuum di
 \subsection{Oracle refinement separates finite-rank, lower-order, and principal-part departures}
 \label{sec:results_oracle}
 
-Table~\ref{tab:T5_1} compares the exact relative covariance under refinement. Truth A behaves as a finite-rank perturbation of the reference: $D_N$ and $\mathrm{KL}_N$ are independent of resolution, so $D_N/N$ and $h_N$ fall as $N$ grows. The coarse-grid values are not an asymptotic rate, because the source profiles are under-resolved at $n_x=16$; the structural observation is that the total relative covariance energy is bounded. The leakage perturbation B$'$ has the same signature without being finite rank: $D_N$ and $\mathrm{KL}_N$ approach finite limits while $D_N/N$ and $h_N$ tend to zero, as expected of an infinite-rank but Hilbert--Schmidt departure.
+Table~\ref{tab:T5_1} compares the exact relative covariance under refinement. Truth A is defined directly in whitened coordinates, so $T_N=VCV^\top$ exactly at every grid, and $D_N=\sum_kc_k^2=13300$ and $\mathrm{KL}_N=\tfrac12\sum_k[c_k-\log(1+c_k)]=88.83$ hold by construction; these rows check the computation rather than test the theory, and $D_N/N$ falls as $N$ grows. The in-class evidence comes from the leakage perturbation B$'$, whose relative covariance is neither finite rank nor fixed by construction: $D_N$ and $\mathrm{KL}_N$ approach finite limits while $D_N/N$ and $h_N$ tend to zero, as expected of an infinite-rank but Hilbert--Schmidt departure.
 
 The conductivity lens B is extensive: $D_N/N$ is nearly constant over the five grids, and a least-squares line gives $\mathrm{KL}_N\approx0.16+0.0315N$ with log--log slope $1.001$. Table~\ref{tab:T5_1} also checks the two quantitative predictions of Lemma~\ref{lem:mult_compact}. First, the gap between $D_N/N$ and $h_N$ shrinks from $8.3\times10^{-4}$ to $6\times10^{-5}$ over the five grids (from $1.3\%$ to $0.1\%$ of $h_N$), so the off-diagonal relative covariance energy per node vanishes, as it must for multiplication plus a compact remainder, and $h_N$ approaches $h_\infty$ from above. Second, the lemma predicts the KL slope
 \begin{equation}
@@ -856,7 +856,7 @@ The sample experiment replaces the population covariance by 200 replicated field
 
 Under the reference population, $\widehat h_N$ fluctuates around zero at all resolutions; the unmodified Marchenko--Pastur edge occasionally admits one apparent upper outlier, consistent with the role of $\widehat r_{\rm MP}$ as a diagnostic rather than a level-controlled test (Section~\ref{sec:sample_protocol}). On A, exactly three upper outliers are detected in every replicate at every resolution; the raw statistic is dominated by the localized source directions, and after deflation $\widehat h_N$ tends toward zero. This holds even though the stationary whitening fit drives $\widehat\kappa$ toward the boundary: a plug-in reference badly distorted in its low-frequency range parameter does not produce a persistent fine-scale diagonal plateau. The weak leakage case B$'$ gives no stable outlier count, and both raw and deflated $\widehat h_N$ fluctuate around zero at the finer grids.
 
-B instead remains nearly resolution invariant and close to the finite-grid oracle targets. For the stiff lens $K\ge1$ the leading principal-part contribution to the lens block of $T$ is non-positive, so the positive directions deflated on B are occasional finite-sample upper-edge crossings rather than lens signal; after removing them the estimate is within $1\%$ of the independently specified $h_\infty$. The persistent principal-part signature is therefore visible from replicated fields without access to $\Sigma_1$.
+B instead remains nearly resolution invariant and close to the finite-grid oracle targets. For the stiff lens $K\ge1$ the leading principal-part contribution to the lens block of $T$ is non-positive, so the positive directions deflated on B are occasional finite-sample upper-edge crossings rather than lens signal. Removing them lowers the in-sample estimate by $0.0004$--$0.0015$, to within $1\%$ of $h_\infty$, but part of that agreement is a same-sample selection effect: with cross-fitted deflation (Table~\ref{tab:r-crossfit}) the deflated and raw values on B coincide, at $0.4$--$3.2\%$ above $h_\infty$ and $1.5$--$2.7\%$ below the finite-grid oracle. The plateau, not its third digit, is the finding. The persistent principal-part signature is therefore visible from replicated fields without access to $\Sigma_1$.
 
 The mixed truth C is the more stringent test, because the fitted stationary reference again collapses its range and the raw statistic is dominated by three source directions. These are recovered as upper outliers in every replicate, and after their removal $\widehat h_N$ approaches the lens-scale plateau seen under B rather than tending to zero as under A: deflation exposes the distributed principal-part component beneath the finite-dimensional spikes. Because the deflation directions are estimated from the same fields, the absolute values are a bias-corrected diagnostic rather than an exactly unbiased estimate; the refinement pattern is the principal result.
 
@@ -1015,7 +1015,7 @@ C & M3-joint & 16 & 4 & 116.4/68.8/41.9 & 0.987/0.984/0.977 & 0.992/0.989/0.978 
  & M5 & 16 & --- & 109.7/66.0/44.1 & 0.987/0.984/0.984 & 0.994/0.990/0.985 \\
  &  & 32 & --- & 104.5/62.0/48.5 & 0.875/0.858/0.945 & 0.975/0.954/0.946 \\
 \bottomrule
-\multicolumn{7}{@{}p{0.97\linewidth}}{\footnotesize M3 cosines are from the rank-3 fit (the CV choice is 3 in every case shown). M5 has no $r_{\rm MP}$ (rank by CV only).} \\
+\multicolumn{7}{@{}p{0.97\linewidth}}{\footnotesize M3 cosines are from the rank-3 fit (the CV choice is 3 in every case shown). $r_{\rm MP}$ is counted after whitening by each model's own base: the fitted M1 for M3-nested, as in Table~\ref{tab:T5_2}, and the jointly fitted base ($\hat\kappa\approx6$) for M3-joint, under which one further eigenvalue crosses the unmodified edge in three cases. These counts come from the single main-seed ensemble, not the five replicates of Table~\ref{tab:T5_2}. M5 has no $r_{\rm MP}$ (rank by CV only).} \\
 \end{tabular}}
 \end{table}
 
@@ -1164,24 +1164,63 @@ M5 & maxiter 500, gtol $10^{-8}$, ftol $10^{-14}$ & $\Delta\ell<10^{-7}n$ per cy
 
 \begin{table}[H]
 \centering
-\caption{M5: exact block coordinate ascent vs the legacy alternation (legacy shown for comparison only). Cycles and final gradient norm $\|\nabla_{(\log\kappa,\theta)}\|$ of the total objective ($n_{\rm train}=200$) for the exact fit; the legacy run did not record them.}
-\label{tab:T5_5}
-\fitbox{%
-\begin{tabular}{@{}llrrcrrrrrr@{}}
+\caption{Oracle refinement for the disc lens and constant $K\equiv1.5$ (smooth lens B in Table~\ref{tab:T5_1}). For constant $K$, Lemma~\ref{lem:mult_compact} predicts $D_N/N\to(K^{-2}-1)^2=0.3086$.}
+\label{tab:r-disc}
+\begin{tabular}{@{}llrrr@{}}
 \toprule
-Truth & $n_x$ & score (leg.) & score (exact) & $r_{\rm cv}$ & $\hat\kappa$ (leg.) & $\hat\kappa$ (exact) & corr (leg.) & corr (exact) & cycles & $\|\nabla\|$ \\
+Truth & $n_x$ & $D_N/N$ & KL$_N$ & $W_2$ \\
 \midrule
-A & 16 & -1.83 & -1.83 & 3/3 & 5.87 & 6.29 & 0.0923 & 0.0563 & 15 & 0.301 \\
-B$'$ & 16 & -0.11 & -0.11 & 0/0 & 5.66 & 5.66 & -0.4548 & -0.4548 & 2 & 0.002 \\
-B & 16 & -0.09 & -0.09 & 0/0 & 5.93 & 5.93 & 0.9970 & 0.9970 & 2 & 0.001 \\
-C & 16 & -1.87 & -1.83 & 3/3 & 5.32 & 5.77 & 0.9965 & 0.9974 & 14 & 0.259 \\
-A & 32 & -5.86 & -5.86 & 3/3 & 6.00 & 6.08 & 0.0569 & 0.0511 & 8 & 0.301 \\
-B$'$ & 32 & -0.25 & -0.25 & 0/0 & 5.51 & 5.51 & -0.1949 & -0.1949 & 2 & 0.015 \\
-B & 32 & -0.12 & -0.12 & 0/0 & 5.99 & 5.99 & 0.9990 & 0.9990 & 2 & 0.010 \\
-C & 32 & -6.38 & -6.37 & 3/3 & 5.95 & 6.06 & 0.9994 & 0.9994 & 13 & 0.304 \\
+B\_disk & 16 & 0.0325 & 5.21 & 0.0030 \\
+ & 24 & 0.0403 & 15.87 & --- \\
+ & 32 & 0.0374 & 26.73 & 0.0033 \\
+ & 48 & 0.0362 & 59.80 & --- \\
+ & 64 & 0.0351 & 104.30 & 0.0032 \\
+K\_const & 16 & 0.2919 & 30.39 & 0.0093 \\
+ & 24 & 0.2999 & 70.81 & --- \\
+ & 32 & 0.3032 & 127.70 & 0.0090 \\
+ & 48 & 0.3059 & 290.71 & --- \\
+ & 64 & 0.3070 & 519.22 & 0.0089 \\
 \bottomrule
-\multicolumn{11}{@{}p{0.97\linewidth}}{\footnotesize corr here is against the lens $\log K$ for every truth and is meaningful only for B and C (see Table~\ref{tab:T5_4}).} \\
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Ten sensors, 5\,\% noise, $n_x=32$: conditional log predictive density $\log p(u_{\rm test}\mid y)$ of the full field given the sensor readings, relative to the truth (nats per field), and RMSE of the posterior mean field.}
+\label{tab:r-sensors}
+\fitbox{%
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+Model & A lpd & A RMSE & B$'$ lpd & B$'$ RMSE & B lpd & B RMSE & C lpd & C RMSE \\
+\midrule
+truth & 0.00 & 0.0347 & 0.00 & 0.0266 & 0.00 & 0.0239 & 0.00 & 0.0314 \\
+M1 & -58.89 & 0.0564 & -0.09 & 0.0266 & -28.89 & 0.0240 & -80.28 & 0.0494 \\
+M2 & -37.07 & 0.0562 & -0.11 & 0.0267 & -28.89 & 0.0240 & -62.87 & 0.0496 \\
+M3-joint & -5.77 & 0.0348 & -0.09 & 0.0266 & -28.89 & 0.0240 & -34.89 & 0.0318 \\
+M3-nested & -9.87 & 0.0358 & -0.09 & 0.0266 & -28.89 & 0.0240 & -38.65 & 0.0327 \\
+M4-$\kappa$ & -58.89 & 0.0564 & -0.02 & 0.0266 & -26.07 & 0.0247 & -76.15 & 0.0497 \\
+M4-$K$ & -45.38 & 0.0563 & -0.20 & 0.0266 & -0.12 & 0.0239 & -40.38 & 0.0501 \\
+M5 & -5.85 & 0.0348 & -0.20 & 0.0266 & -0.12 & 0.0239 & -6.29 & 0.0316 \\
+\bottomrule
 \end{tabular}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Truth B$'$ with more training fields (nested: the main 200 plus new fields; main test set). Scores in nats per field vs truth; M4-$\kappa$ corr with the true $\log(\kappa(x)^2/\kappa_0^2)$.}
+\label{tab:r-bp}
+\begin{tabular}{@{}rrrrrrrrr@{}}
+\toprule
+$n_x$ & $n_{\rm train}$ & M1 & M1 $\hat\kappa$ & M3-joint & $r_{\rm cv}$ & $r_{\rm MP}$ & M4-$\kappa$ & corr \\
+\midrule
+16 & 200 & -0.125 & 5.54 & -0.125 & 0 & 0 & 0.007 & 0.738 \\
+16 & 400 & -0.133 & 5.64 & -0.133 & 0 & 0 & -0.024 & 0.856 \\
+16 & 800 & -0.138 & 5.56 & -0.138 & 0 & 0 & -0.042 & 0.929 \\
+32 & 200 & -0.138 & 5.44 & -0.138 & 0 & 0 & 0.001 & 0.800 \\
+32 & 400 & -0.144 & 5.49 & -0.144 & 0 & 0 & -0.038 & 0.861 \\
+32 & 800 & -0.148 & 5.52 & -0.148 & 0 & 0 & -0.025 & 0.874 \\
+\bottomrule
+\end{tabular}
 \end{table}
 
 \begin{table}[H]
@@ -1207,6 +1246,61 @@ B off-grid & 32 & 1 & -28.63 & -28.62 & -28.63 & -26.19 & -1.73 & -1.73 & 0 \\
 C off-grid & 32 & 1 & -81.62 & -65.75 & -34.36 & -80.65 & -44.67 & -7.91 & 3 \\
 \bottomrule
 \multicolumn{10}{@{}p{0.97\linewidth}}{\footnotesize M3-nested was not refitted on the robustness seeds (\texttt{run\_robust\_fits.py} skips it); it is omitted here.} \\
+\end{tabular}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{M5: exact block coordinate ascent vs the legacy alternation (legacy shown for comparison only). Cycles and final gradient norm $\|\nabla_{(\log\kappa,\theta)}\|$ of the total objective ($n_{\rm train}=200$) for the exact fit; the legacy run did not record them.}
+\label{tab:T5_5}
+\fitbox{%
+\begin{tabular}{@{}llrrcrrrrrr@{}}
+\toprule
+Truth & $n_x$ & score (leg.) & score (exact) & $r_{\rm cv}$ & $\hat\kappa$ (leg.) & $\hat\kappa$ (exact) & corr (leg.) & corr (exact) & cycles & $\|\nabla\|$ \\
+\midrule
+A & 16 & -1.83 & -1.83 & 3/3 & 5.87 & 6.29 & --- & --- & 15 & 0.301 \\
+B$'$ & 16 & -0.11 & -0.11 & 0/0 & 5.66 & 5.66 & --- & --- & 2 & 0.002 \\
+B & 16 & -0.09 & -0.09 & 0/0 & 5.93 & 5.93 & 0.9970 & 0.9970 & 2 & 0.001 \\
+C & 16 & -1.87 & -1.83 & 3/3 & 5.32 & 5.77 & 0.9965 & 0.9974 & 14 & 0.259 \\
+A & 32 & -5.86 & -5.86 & 3/3 & 6.00 & 6.08 & --- & --- & 8 & 0.301 \\
+B$'$ & 32 & -0.25 & -0.25 & 0/0 & 5.51 & 5.51 & --- & --- & 2 & 0.015 \\
+B & 32 & -0.12 & -0.12 & 0/0 & 5.99 & 5.99 & 0.9990 & 0.9990 & 2 & 0.010 \\
+C & 32 & -6.38 & -6.37 & 3/3 & 5.95 & 6.06 & 0.9994 & 0.9994 & 13 & 0.304 \\
+\bottomrule
+\multicolumn{11}{@{}p{0.97\linewidth}}{\footnotesize corr is omitted on A and B$'$, whose true conductivity is $K\equiv1$, so the correlation is undefined (as in Table~\ref{tab:T5_4}).} \\
+\end{tabular}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{$\lambda_\theta$ sweep (penalty $\lambda_\theta\|\theta\|^2$ on the total negative log-likelihood). True peak $K=e=2.718$.}
+\label{tab:r-lambda}
+\fitbox{%
+\begin{tabular}{@{}lllrrrrrrr@{}}
+\toprule
+Truth & $n_x$ & $\lambda_\theta$ & M4-$K$ corr & M4-$K$ $\max\hat K$ & M4-$K$ score & M5 corr & M5 $\max\hat K$ & M5 $r_{\rm cv}$ & M5 score \\
+\midrule
+B & 16 & 0.001 & 0.9970 & 2.46 & -0.09 & 0.9970 & 2.46 & 0 & -0.09 \\
+B & 16 & 0.01 & 0.9970 & 2.46 & -0.09 & 0.9970 & 2.46 & 0 & -0.09 \\
+B & 16 & 0.1 & 0.9970 & 2.46 & -0.09 & 0.9970 & 2.46 & 0 & -0.09 \\
+B & 16 & 1 & 0.9970 & 2.45 & -0.09 & 0.9970 & 2.45 & 0 & -0.09 \\
+B & 16 & 10 & 0.9973 & 2.40 & -0.08 & 0.9973 & 2.40 & 0 & -0.08 \\
+B & 32 & 0.001 & 0.9990 & 2.67 & -0.12 & 0.9990 & 2.67 & 0 & -0.12 \\
+B & 32 & 0.01 & 0.9990 & 2.67 & -0.12 & 0.9990 & 2.67 & 0 & -0.12 \\
+B & 32 & 0.1 & 0.9990 & 2.67 & -0.12 & 0.9990 & 2.67 & 0 & -0.12 \\
+B & 32 & 1 & 0.9990 & 2.67 & -0.12 & 0.9990 & 2.67 & 0 & -0.12 \\
+B & 32 & 10 & 0.9990 & 2.65 & -0.12 & 0.9990 & 2.65 & 0 & -0.12 \\
+C & 16 & 0.001 & 0.6131 & 2.43 & -30.40 & 0.9974 & 2.52 & 3 & -1.83 \\
+C & 16 & 0.01 & 0.6131 & 2.43 & -30.40 & 0.9974 & 2.52 & 3 & -1.83 \\
+C & 16 & 0.1 & 0.6131 & 2.43 & -30.40 & 0.9974 & 2.52 & 3 & -1.83 \\
+C & 16 & 1 & 0.6134 & 2.44 & -30.39 & 0.9975 & 2.51 & 3 & -1.83 \\
+C & 16 & 10 & 0.6159 & 2.50 & -30.38 & 0.9977 & 2.44 & 3 & -1.83 \\
+C & 32 & 0.001 & 0.8864 & 2.75 & -42.24 & 0.9994 & 2.61 & 3 & -6.37 \\
+C & 32 & 0.01 & 0.8864 & 2.75 & -42.24 & 0.9994 & 2.61 & 3 & -6.37 \\
+C & 32 & 0.1 & 0.8864 & 2.75 & -42.24 & 0.9994 & 2.61 & 3 & -6.37 \\
+C & 32 & 1 & 0.8864 & 2.75 & -42.23 & 0.9994 & 2.61 & 3 & -6.37 \\
+C & 32 & 10 & 0.8868 & 2.74 & -42.22 & 0.9994 & 2.60 & 3 & -6.37 \\
+\bottomrule
 \end{tabular}}
 \end{table}
 
@@ -1248,100 +1342,6 @@ C & 16 & 3.5952 $\pm$ 0.3750 & 0.1512 $\pm$ 0.0092 & 3.0 & 0.1702 \\
  & 32 & 0.4390 $\pm$ 0.0575 & 0.0614 $\pm$ 0.0014 & 3.0 & 0.0651 \\
  & 48 & 0.1416 $\pm$ 0.0096 & 0.0596 $\pm$ 0.0003 & 3.0 & 0.0585 \\
  & 64 & 0.0880 $\pm$ 0.0030 & 0.0605 $\pm$ 0.0003 & 3.0 & 0.0582 \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{Truth B$'$ with more training fields (nested: the main 200 plus new fields; main test set). Scores in nats per field vs truth; M4-$\kappa$ corr with the true $\log(\kappa(x)^2/\kappa_0^2)$.}
-\label{tab:r-bp}
-\begin{tabular}{@{}rrrrrrrrr@{}}
-\toprule
-$n_x$ & $n_{\rm train}$ & M1 & M1 $\hat\kappa$ & M3-joint & $r_{\rm cv}$ & $r_{\rm MP}$ & M4-$\kappa$ & corr \\
-\midrule
-16 & 200 & -0.125 & 5.54 & -0.125 & 0 & 0 & 0.007 & 0.738 \\
-16 & 400 & -0.133 & 5.64 & -0.133 & 0 & 0 & -0.024 & 0.856 \\
-16 & 800 & -0.138 & 5.56 & -0.138 & 0 & 0 & -0.042 & 0.929 \\
-32 & 200 & -0.138 & 5.44 & -0.138 & 0 & 0 & 0.001 & 0.800 \\
-32 & 400 & -0.144 & 5.49 & -0.144 & 0 & 0 & -0.038 & 0.861 \\
-32 & 800 & -0.148 & 5.52 & -0.148 & 0 & 0 & -0.025 & 0.874 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{$\lambda_\theta$ sweep (penalty $\lambda_\theta\|\theta\|^2$ on the total negative log-likelihood). True peak $K=e=2.718$.}
-\label{tab:r-lambda}
-\fitbox{%
-\begin{tabular}{@{}lllrrrrrrr@{}}
-\toprule
-Truth & $n_x$ & $\lambda_\theta$ & M4-$K$ corr & M4-$K$ $\max\hat K$ & M4-$K$ score & M5 corr & M5 $\max\hat K$ & M5 $r_{\rm cv}$ & M5 score \\
-\midrule
-B & 16 & 0.001 & 0.9970 & 2.46 & -0.09 & 0.9970 & 2.46 & 0 & -0.09 \\
-B & 16 & 0.01 & 0.9970 & 2.46 & -0.09 & 0.9970 & 2.46 & 0 & -0.09 \\
-B & 16 & 0.1 & 0.9970 & 2.46 & -0.09 & 0.9970 & 2.46 & 0 & -0.09 \\
-B & 16 & 1 & 0.9970 & 2.45 & -0.09 & 0.9970 & 2.45 & 0 & -0.09 \\
-B & 16 & 10 & 0.9973 & 2.40 & -0.08 & 0.9973 & 2.40 & 0 & -0.08 \\
-B & 32 & 0.001 & 0.9990 & 2.67 & -0.12 & 0.9990 & 2.67 & 0 & -0.12 \\
-B & 32 & 0.01 & 0.9990 & 2.67 & -0.12 & 0.9990 & 2.67 & 0 & -0.12 \\
-B & 32 & 0.1 & 0.9990 & 2.67 & -0.12 & 0.9990 & 2.67 & 0 & -0.12 \\
-B & 32 & 1 & 0.9990 & 2.67 & -0.12 & 0.9990 & 2.67 & 0 & -0.12 \\
-B & 32 & 10 & 0.9990 & 2.65 & -0.12 & 0.9990 & 2.65 & 0 & -0.12 \\
-C & 16 & 0.001 & 0.6131 & 2.43 & -30.40 & 0.9974 & 2.52 & 3 & -1.83 \\
-C & 16 & 0.01 & 0.6131 & 2.43 & -30.40 & 0.9974 & 2.52 & 3 & -1.83 \\
-C & 16 & 0.1 & 0.6131 & 2.43 & -30.40 & 0.9974 & 2.52 & 3 & -1.83 \\
-C & 16 & 1 & 0.6134 & 2.44 & -30.39 & 0.9975 & 2.51 & 3 & -1.83 \\
-C & 16 & 10 & 0.6159 & 2.50 & -30.38 & 0.9977 & 2.44 & 3 & -1.83 \\
-C & 32 & 0.001 & 0.8864 & 2.75 & -42.24 & 0.9994 & 2.61 & 3 & -6.37 \\
-C & 32 & 0.01 & 0.8864 & 2.75 & -42.24 & 0.9994 & 2.61 & 3 & -6.37 \\
-C & 32 & 0.1 & 0.8864 & 2.75 & -42.24 & 0.9994 & 2.61 & 3 & -6.37 \\
-C & 32 & 1 & 0.8864 & 2.75 & -42.23 & 0.9994 & 2.61 & 3 & -6.37 \\
-C & 32 & 10 & 0.8868 & 2.74 & -42.22 & 0.9994 & 2.60 & 3 & -6.37 \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{Oracle refinement for the disc lens and constant $K\equiv1.5$ (smooth lens B in Table~\ref{tab:T5_1}). For constant $K$, Lemma~\ref{lem:mult_compact} predicts $D_N/N\to(K^{-2}-1)^2=0.3086$.}
-\label{tab:r-disc}
-\begin{tabular}{@{}llrrr@{}}
-\toprule
-Truth & $n_x$ & $D_N/N$ & KL$_N$ & $W_2$ \\
-\midrule
-B\_disk & 16 & 0.0325 & 5.21 & 0.0030 \\
- & 24 & 0.0403 & 15.87 & --- \\
- & 32 & 0.0374 & 26.73 & 0.0033 \\
- & 48 & 0.0362 & 59.80 & --- \\
- & 64 & 0.0351 & 104.30 & 0.0032 \\
-K\_const & 16 & 0.2919 & 30.39 & 0.0093 \\
- & 24 & 0.2999 & 70.81 & --- \\
- & 32 & 0.3032 & 127.70 & 0.0090 \\
- & 48 & 0.3059 & 290.71 & --- \\
- & 64 & 0.3070 & 519.22 & 0.0089 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{Ten sensors, 5\,\% noise, $n_x=32$: conditional log predictive density $\log p(u_{\rm test}\mid y)$ of the full field given the sensor readings, relative to the truth (nats per field), and RMSE of the posterior mean field.}
-\label{tab:r-sensors}
-\fitbox{%
-\begin{tabular}{@{}lrrrrrrrr@{}}
-\toprule
-Model & A lpd & A RMSE & B$'$ lpd & B$'$ RMSE & B lpd & B RMSE & C lpd & C RMSE \\
-\midrule
-truth & 0.00 & 0.0347 & 0.00 & 0.0266 & 0.00 & 0.0239 & 0.00 & 0.0314 \\
-M1 & -58.89 & 0.0564 & -0.09 & 0.0266 & -28.89 & 0.0240 & -80.28 & 0.0494 \\
-M2 & -37.07 & 0.0562 & -0.11 & 0.0267 & -28.89 & 0.0240 & -62.87 & 0.0496 \\
-M3-joint & -5.77 & 0.0348 & -0.09 & 0.0266 & -28.89 & 0.0240 & -34.89 & 0.0318 \\
-M3-nested & -9.87 & 0.0358 & -0.09 & 0.0266 & -28.89 & 0.0240 & -38.65 & 0.0327 \\
-M4-$\kappa$ & -58.89 & 0.0564 & -0.02 & 0.0266 & -26.07 & 0.0247 & -76.15 & 0.0497 \\
-M4-$K$ & -45.38 & 0.0563 & -0.20 & 0.0266 & -0.12 & 0.0239 & -40.38 & 0.0501 \\
-M5 & -5.85 & 0.0348 & -0.20 & 0.0266 & -0.12 & 0.0239 & -6.29 & 0.0316 \\
 \bottomrule
 \end{tabular}}
 \end{table}
