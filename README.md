@@ -1,4 +1,9 @@
-# Learning When to Correct a Gaussian Reference and When to Change Its Operator
+# Measure Equivalence as a Guide for Learning SPDE Priors from Replicated Fields
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23443597.svg)](https://doi.org/10.5281/zenodo.23443597)
+
+Raj Jung Mahat, George W. Woodruff School of Mechanical Engineering, Georgia Institute of Technology.
+Preprint: [doi:10.5281/zenodo.23443597](https://doi.org/10.5281/zenodo.23443597).
 
 LaTeX source of the paper. `paper.pdf` is the compiled version of `paper.tex` at the current commit.
 
@@ -40,3 +45,18 @@ Raj Jung Mahat, George W. Woodruff School of Mechanical Engineering, Georgia Ins
 
 The manuscript, its source and its figures are licensed under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); see `LICENSE`.
+
+## Citation
+
+```bibtex
+@misc{Mahat2026MeasureEquivalence,
+  author = {Mahat, Raj Jung},
+  title  = {Measure Equivalence as a Guide for Learning {SPDE} Priors from Replicated Fields},
+  year   = {2026},
+  publisher = {Zenodo},
+  doi    = {10.5281/zenodo.23443597},
+  url    = {https://doi.org/10.5281/zenodo.23443597}
+}
+```
+
+See also `CITATION.cff`.
