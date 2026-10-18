@@ -28,10 +28,10 @@ is needed.
 | `paper.tex` | manuscript (single file) |
 | `paper.pdf` | compiled manuscript |
 | `figures/fig4_1_truths.pdf` | Figure 4.1, synthetic populations |
-| `figures/fig5_1_oracle_refinement.pdf` | Figure 5.1, oracle refinement |
-| `figures/fig5_2_sample_vs_oracle.pdf` | Figure 5.2, sample diagnostic vs oracle |
-| `figures/fig5_3_misattribution.pdf` | Figure 5.3, misattribution by wrong-class models |
-| `figures/fig5_4_m5_selectivity.png` | Figure 5.4, M5 selectivity |
+| `figures/fig5_1_oracle_refinement.pdf` | not used in the current manuscript (same content as Table 5.1) |
+| `figures/fig5_2_sample_vs_oracle.pdf` | Figure 5.1, sample diagnostic vs oracle |
+| `figures/fig5_3_misattribution.pdf` | Figure 5.2, misattribution by wrong-class models |
+| `figures/fig5_4_m5_selectivity.png` | Figure 5.3, M5 selectivity |
 | `build.sh` | three-pass `pdflatex` build into `build/`, copies the PDF back |
 
 The code, data and result files that produced the numbers and figures are not part of this repository.
