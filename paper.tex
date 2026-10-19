@@ -50,11 +50,11 @@ Learning a Gaussian prior from replicated spatial fields requires deciding not o
 
 Gaussian random fields are widely used as probabilistic models for spatially varying quantities, and stochastic partial differential equation (SPDE) representations connect covariance structure to local differential operators \citep{Lindgren2011,LindgrenBolinRue2022}. Replicated realizations carry information about population-level covariance beyond that in a single realization, and have been used to estimate nonstationary dependence and to separate persistent population structure from realization-specific variation \citep{Ingebrigtsen2015,Fuglstad2015}. We ask whether replicated fields can reveal if a covariance discrepancy can be represented as a correction of a chosen reference model, or whether the operator defining that reference must itself change.
 
-A common response to mismatch is to add flexibility around a reference model. One class of methods augments a simpler covariance model with low-dimensional or low-rank structure, as in fixed-rank kriging, predictive processes, and full-scale covariance approximations \citep{CressieJohannesson2008,Banerjee2008,SangHuang2012}; LatticeKrig, nearest-neighbor Gaussian processes (NNGP), and fused Gaussian processes likewise operate on the correction side of a fixed reference. A second class modifies the covariance-generating operator, for example through spatially varying range, anisotropy, or coefficients in an SPDE representation \citep{Fuglstad2015,LindgrenBolinRue2022}. Penalized-complexity (PC) priors shrink a flexible component toward a simpler base model \citep{Simpson2017,Fuglstad2019}. In each case the reference is taken as given; whether it is the right reference for the observed population is not asked.
+A common response to mismatch is to add flexibility around a reference model. One class of methods augments a simpler covariance model with low-dimensional or low-rank structure, as in fixed-rank kriging, predictive processes, and full-scale covariance approximations \citep{CressieJohannesson2008,Banerjee2008,SangHuang2012}; LatticeKrig, nearest-neighbor Gaussian processes (NNGP), and fused Gaussian processes likewise operate on the correction side of a fixed reference. A second class modifies the covariance-generating operator, for example through spatially varying range, anisotropy, or coefficients in an SPDE representation \citep{Fuglstad2015,LindgrenBolinRue2022}. Both kinds have been fitted to replicated fields: low-rank-plus-sparse models \citep{Krock2021,LeDuc2026} on one side, spatially varying SPDE or autoregressive coefficients on the other \citep{Ingebrigtsen2015,Wiens2020,Sikorski2025}. \citet{Fuglstad2015} suggested augmenting nonstationary SPDE models with a small number of global basis functions, but we know of no model that combines a learned principal operator with a learned low-rank correction. Penalized-complexity (PC) priors shrink a flexible component toward a simpler base model \citep{Simpson2017,Fuglstad2019}. In each case the reference is taken as given; whether it is the right reference for the observed population is not asked.
 
 In function space these departures are not alike: by the Feldman--H\'ajek dichotomy and the operator results of \citet{BolinKirchner2023}, smooth source and lower-order perturbations can remain in the Gaussian measure class of the reference, whereas a change of the principal coefficient cannot (Section~\ref{sec:theory}). On a finite mesh, however, all of them appear only as covariance changes.
 
-The distinction matters for methods that learn probability measures independently of discretization. \citet{Lim2025} formulate score-based diffusion in function space under absolute-continuity and Cameron--Martin conditions relative to a Gaussian perturbing measure, and \citet{Pidstrigach2023} show that discretize-first diffusion constructions can deteriorate under mesh refinement and develop an infinite-dimensional formulation with dimension-independent guarantees. In linear inverse problems the Gaussian posterior differs from its prior only through a finite-dimensional update, and \citet{CarereLie2026} characterize low-rank posterior approximations that remain equivalent to both. Population-prior learning has no analogous guarantee that the observed population lies in the measure class of the chosen reference.
+The distinction matters for methods that learn probability measures independently of discretization. \citet{Lim2025} formulate score-based diffusion in function space under absolute-continuity and Cameron--Martin conditions relative to a Gaussian perturbing measure, and \citet{Pidstrigach2024} show that discretize-first diffusion constructions can deteriorate under mesh refinement and develop an infinite-dimensional formulation with dimension-independent guarantees. In linear inverse problems the Gaussian posterior differs from its prior only through a finite-dimensional update, and \citet{CarereLie2026} characterize low-rank posterior approximations that remain equivalent to both. Population-prior learning has no analogous guarantee that the observed population lies in the measure class of the chosen reference.
 
 The statistical problem also differs from comparing two specified continuum models: the reference and a finite collection of replicates are observed, but the mechanism producing the discrepancy is not, and on a fixed discretization every pair of nonsingular Gaussians is mutually absolutely continuous. Fixed-domain results add a second difficulty: covariance parameters can be weakly identified while prediction remains accurate, and misspecified range parameters can produce asymptotically similar interpolation \citep{Stein1999,Zhang2004,KaufmanShaby2013}. The range parameter thus provides a weakly constrained low-frequency direction through which a stationary fit can absorb localized source variability, so a finite-resolution model can fit well while assigning variability to the wrong structural component.
 
@@ -199,7 +199,7 @@ so $\Sigma_1=A_0^{-1}(I+GCG^\ast)A_0^{-1}$ and, since $\Sigma_0^{1/2}=A_0^{-1}$,
 \end{equation}
 and for bounded smooth $V$ the singular values inherit the elliptic decay $s_j(A_0^{-1}V)=O(j^{-2/d})$, so $\sum_js_j^2\sim\sum_jj^{-4/d}$ is finite for $d<4$: infinitely many modes are affected, but with a relative effect that decays fast enough to remain Hilbert--Schmidt in $d\le3$.
 
-\paragraph{Spatially varying conductivity.} Changing the principal coefficient, $A_1=\kappa_0^2I-\nabla\!\cdot(K_1(x)\nabla)$, leaves the class: in the variable-coefficient setting of \citet[Thm.~4.11 and Lemma~4.9]{BolinKirchner2023}, equivalence requires $K_1(x)=K_0(x)$. With the driving-noise normalization held fixed, even a constant rescaling $K_1=cK_0$, $c\neq1$, is excluded, since $(\kappa^2-c\Delta)^{-2}=c^{-2}(\kappa^2/c-\Delta)^{-2}$ changes both covariance amplitude and range.
+\paragraph{Spatially varying conductivity.} Changing the principal coefficient, $A_1=\kappa_0^2I-\nabla\!\cdot(K_1(x)\nabla)$, leaves the class: in the variable-coefficient setting of \citet[Thm.~4.11 and Lemma~4.9]{BolinKirchner2023}, equivalence requires $K_1(x)=K_0(x)$. With the driving-noise normalization held fixed, even a constant rescaling $K_1=cK_0$, $c\neq1$, is excluded, since $(\kappa^2-c\Delta)^{-2}=c^{-2}(\kappa^2/c-\Delta)^{-2}$ changes both covariance amplitude and range. Prediction is less sensitive: a constant multiple of the principal coefficient still gives asymptotically optimal linear prediction \citep[Thm.~4.13]{BolinKirchner2023}, so the constant rescaling $K\equiv1.5$ of Section~\ref{sec:robustness} predicts well while lying outside the class.
 
 \begin{center}
 \small
@@ -295,7 +295,7 @@ where $M_m$ is multiplication by $m$ and $R$ is compact on $L^2(\mathcal D)$. Co
 \end{enumerate}
 \end{lemma}
 
-The proof is given in Appendix~\ref{app:proof_lemma}. Part (i) recovers the non-compactness of \citet[Lemma~4.9]{BolinKirchner2023}; parts (ii) and (iii) give the extensive scaling \eqref{eq:extensive_scaling} with an explicit constant, which equivalence theory alone does not provide. The lemma is stated for a piecewise-constant Galerkin compression; the finite-difference relative covariance used in the numerical study is a consistent approximation of it, and the agreement of the two is checked numerically in Section~\ref{sec:results_oracle}. The proof requires $K\in C^1$ and does not cover the discontinuous disc lens of Section~\ref{sec:robustness}; there the per-node energy also persists ($D_N/N\approx0.035$), which suggests that the conclusion extends, but this is not proved here.
+The proof is given in Appendix~\ref{app:proof_lemma}. Part (i) recovers the non-compactness of \citet[Lemma~4.9]{BolinKirchner2023}; parts (ii) and (iii) give the extensive scaling \eqref{eq:extensive_scaling} with an explicit constant, which equivalence theory alone does not provide. Linear growth of KL with discretization dimension under singularity is known in diagonal settings \citep[Sec.~3.4]{Agapiou2017}; what the lemma adds is the decomposition and the constants for a principal-coefficient departure.The lemma is stated for a piecewise-constant Galerkin compression; the finite-difference relative covariance used in the numerical study is a consistent approximation of it, and the agreement of the two is checked numerically in Section~\ref{sec:results_oracle}. The proof requires $K\in C^1$ and does not cover the discontinuous disc lens of Section~\ref{sec:robustness}; there the per-node energy also persists ($D_N/N\approx0.035$), which suggests that the conclusion extends, but this is not proved here.
 
 The same distinction appears in Gaussian relative entropy. If the eigenvalues of $I+T_N$ remain bounded away from zero, then
 \begin{equation}
@@ -311,6 +311,13 @@ The same distinction appears in Gaussian relative entropy. If the eigenvalues of
     \label{eq:gaussian_kl}
 \end{equation}
 For a bounded Hilbert--Schmidt perturbation this sum can converge, whereas a persistent $O(1)$ shift over a positive fraction of modes produces an $O(N)$ KL cost; for a smooth principal-coefficient change, Lemma~\ref{lem:mult_compact}(iii) gives its slope. Thus a principal-part mismatch can appear finite at every fixed discretization while becoming increasingly distant from the reference as the mesh is refined.
+
+\paragraph{An out-of-class source departure.} The three departures of Section~\ref{sec:three_departures} do not exhaust the out-of-class cases. A spatially varying source intensity, $A_0u=s(x)\mathcal W$ with $s$ smooth and $0<s_0\le s$, gives $\Sigma_1=A_0^{-1}M_{s^2}A_0^{-1}$ and, since $\Sigma_0^{-1/2}=A_0$, exactly
+\begin{equation}
+    T=M_{s^2-1}.
+    \label{eq:amplitude}
+\end{equation}
+This $T$ is multiplication with no compact remainder, so it is not compact unless $s\equiv1$, and the limits of Lemma~\ref{lem:mult_compact}(ii)--(iii) hold with $m=s^2-1$. The departure enters through the source yet leaves the class, so a refinement plateau shows that the reference must change, not which part of it. Amplitude and conductivity changes differ in the compact remainder $R$, which vanishes in \eqref{eq:amplitude} but not in general for a conductivity change; we do not test that separation. An amplitude field applied before the operator, as in $(\kappa(x)^2-\Delta)(\tau(x)u)=\mathcal W$ \citep{Ingebrigtsen2015}, does not commute with $A_0^{-1}$ and is not covered by \eqref{eq:amplitude}.
 
 \subsection{What the continuum theory does not determine}
 \label{sec:handoff}
@@ -656,7 +663,7 @@ All experiments use the same reference operator and differ only in the component
 \subsection{Domain, discretization, and reference process}
 \label{sec:design_setup}
 
-The common setup is summarized in Table~\ref{tab:setup}; its discrete covariance is \eqref{eq:model_family} with $Q_W=h^{-2}I$. The assembled operators are symmetric, so $A^{-T}=A^{-1}$ numerically; the transpose is kept to make the construction explicit.
+The common setup is summarized in Table~\ref{tab:setup}; its discrete covariance is \eqref{eq:model_family} with $Q_W=h^{-2}I$. The assembled operators are symmetric, so $A^{-T}=A^{-1}$ numerically; the transpose is kept to make the construction explicit. The fields have zero mean and second moments are formed without sample centring; an unmodeled mean $\mu$ would add the rank-one term $\mu\mu^\top$ to the uncentred second moment and appear as a spurious source direction, which centring across replicates removes.
 
 \begin{table}[htbp]
 \centering
@@ -1052,16 +1059,16 @@ The central result is that replicated fields can decide whether a discrepancy fr
 The resulting modeling rule is: \emph{learn the operator where the population demands a change of Gaussian measure class; correct relative to that operator where the remaining discrepancy stays within class}. When a discrepancy persists across an increasing fraction of resolved modes, adding correction terms to a fixed reference does not address it; the reference itself must change.
 
 \paragraph{Implications for learned priors and function-space generative models.}
-Discretization-independent generative constructions already make absolute-continuity and Cameron--Martin assumptions explicit \citep{Lim2025,Pidstrigach2023}. If the principal part of the Gaussian reference is wrong, no finite-dimensional correction repairs the measure-class mismatch, even though a fixed mesh can make the corrected covariance look adequate. A refinement diagnostic of the type used here can serve as a pre-training check on the reference.
+Function-space diffusion models make their measure-class assumptions explicit, but these assumptions differ from the one tested here. \citet[Sec.~4.1]{Lim2025} require the data to lie in the Cameron--Martin space of the Gaussian noise, which is a smoothness ordering between data and reference rather than equivalence of the two. \citet[Secs.~6.1.1 and 7.1]{Pidstrigach2024} recommend choosing the reference close to the data, for example from the empirical covariance, but give no test of that choice. \citet{Lin2026} learn Gaussian process priors from many datasets as a fitted base kernel plus a learned residual, again without checking the base. The refinement diagnostic tests Hilbert--Schmidt equivalence, the relevant condition when the Gaussian reference is meant to model the population itself, as for learned priors and base measures, rather than to serve as diffusion noise. If the principal part of such a reference is wrong, no finite-dimensional correction repairs the mismatch, even though a fixed mesh can make the corrected covariance look adequate.
 
 \paragraph{Implications for reference-based complexity priors.}
-For a principal-part mismatch, $\mathrm{KL}_N=O(N)$, so the PC distance $d_N=\sqrt{2\,\mathrm{KL}_N}$ grows as $O(\sqrt N)$ and the same physical departure looks more complex as the mesh is refined \citep{Simpson2017,Fuglstad2019}. A discretization-stable complexity then needs either a different distance, as for singular operator changes \citep{LlamazaresElias2026}, or a new base operator relative to which the remaining departure is within class.
+For a principal-part mismatch, $\mathrm{KL}_N=O(N)$, so the PC distance $d_N=\sqrt{2\,\mathrm{KL}_N}$ grows as $O(\sqrt N)$ and the same physical departure looks more complex as the mesh is refined \citep{Simpson2017,Fuglstad2019}. A discretization-stable complexity then needs either a different distance or a different base. \citet{LlamazaresElias2026} keep the base and replace KL by a Sobolev distance for singular anisotropy changes; the alternative suggested here replaces the base operator, so that the remaining departure is within class and KL stays finite.
 
 \paragraph{Implications for spatial covariance fitting.}
-With unmodeled wells, the stationary fit gives $\widehat\kappa\approx3\times10^{-5}$ against a generating value of $6$, while M5 returns $\widehat\kappa=6.08$. The base of the Mat\'ern PC prior for the range is infinite range, $\kappa=0$ \citep{Fuglstad2019}, so shrinkage toward it would reinforce the confounded direction. A near-zero fitted range when sources may be unmodeled is a mechanism-attribution warning, not automatically evidence of long-range dependence.
+With unmodeled wells, the stationary fit gives $\widehat\kappa\approx3\times10^{-5}$ against a generating value of $6$, while M5 returns $\widehat\kappa=6.08$. The base of the Mat\'ern PC prior for the range is infinite range, $\kappa=0$ \citep{Fuglstad2019}, so shrinkage toward it would reinforce the confounded direction. The effect is the covariance-side counterpart of known range inflation by unmodeled low-frequency structure \citep[Sec.~3.2]{Bose2018}; in the limit, the maximum-likelihood range is infinite when the data differ from the prior mean by a constant \citep[Thm.~2.3]{KarvonenOates2023}.A near-zero fitted range when sources may be unmodeled is a mechanism-attribution warning, not automatically evidence of long-range dependence.
 
 \paragraph{Limitations.}
-Several robustness checks in Section~\ref{sec:robustness} reduce implementation-specific concerns: although $\lambda_\theta$ was fixed by hand, sweeping it from $10^{-3}$ to $10$ leaves the B and C M5 ranks and scores unchanged at the reported precision; across four seeds the $n_x=32$ M5 ranks remain $3/0/3$ for A/B/C; moving the lens off the RBF grid lowers the fitted lens correlation to about $0.974$ but preserves the B/C rank allocation; a discontinuous disc lens retains non-vanishing $D_N/N$ and a growing KL cost; and the constant rescaling $K\equiv1.5$ likewise retains extensive principal-part scaling. The remaining limitations are structural. The source-deflation rule was evaluated with a stiff conductivity lens, $K\ge1$, so although the diagonal refinement statistic $h_N$ is sign insensitive, the upper-edge source-removal step is not yet a general soft-lens classifier. The study is two-dimensional and employs a square domain whose corners fall outside the smooth-boundary assumptions of the strongest variable-coefficient equivalence theorem. M5 does not include a spatially varying lower-order coefficient, and M4 fits use a single initialization. No real aquifer data are analyzed, and the sample-based diagonal refinement statistic $\widehat h_N$ and M5 architecture were developed after the oracle refinement results rather than specified in advance.
+Several robustness checks in Section~\ref{sec:robustness} reduce implementation-specific concerns: although $\lambda_\theta$ was fixed by hand, sweeping it from $10^{-3}$ to $10$ leaves the B and C M5 ranks and scores unchanged at the reported precision; across four seeds the $n_x=32$ M5 ranks remain $3/0/3$ for A/B/C; moving the lens off the RBF grid lowers the fitted lens correlation to about $0.974$ but preserves the B/C rank allocation; a discontinuous disc lens retains non-vanishing $D_N/N$ and a growing KL cost; and the constant rescaling $K\equiv1.5$ likewise retains extensive principal-part scaling. The remaining limitations are structural. The source-deflation rule was evaluated with a stiff conductivity lens, $K\ge1$, so although the diagonal refinement statistic $h_N$ is sign insensitive, the upper-edge source-removal step is not yet a general soft-lens classifier. The study is two-dimensional and employs a square domain whose corners fall outside the smooth-boundary assumptions of the strongest variable-coefficient equivalence theorem. The only out-of-class departure studied is a principal-part change; a spatially varying source intensity \eqref{eq:amplitude} would also produce a plateau, and it is not tested whether finite samples separate it from a conductivity change. M5 does not include a spatially varying lower-order coefficient, and M4 fits use a single initialization. No real aquifer data are analyzed, and the sample-based diagonal refinement statistic $\widehat h_N$ and M5 architecture were developed after the oracle refinement results rather than specified in advance.
 
 \paragraph{Next steps.}
 A soft-lens experiment would separate the sign-insensitive diagnostic from the sign-specific deflation rule, and low-replicate regimes would show how much replication the classification needs. Lemma~\ref{lem:mult_compact} should be extended to discontinuous coefficients, as the disc lens suggests, to tensor-valued $K$, and to $d=3$. Samplers for principal-part hyperparameters, which index mutually singular families, deserve study under refinement. Finally, the approach should be tested on replicated observations from a pumped heterogeneous aquifer, and on population priors over constitutive behavior transferred between experiments in mechanics.
@@ -1351,6 +1358,12 @@ C & 16 & 3.5952 $\pm$ 0.3750 & 0.1512 $\pm$ 0.0092 & 3.0 & 0.1702 \\
 {\small
 \begin{thebibliography}{99}
 
+\bibitem[Agapiou et~al.(2017)Agapiou, Papaspiliopoulos, Sanz-Alonso, and Stuart]{Agapiou2017}
+Agapiou, S., Papaspiliopoulos, O., Sanz-Alonso, D., and Stuart, A.~M. (2017).
+Importance sampling: intrinsic dimension and computational cost.
+\emph{Statistical Science}, 32(3), 405--431.
+doi:10.1214/17-STS611.
+
 \bibitem[Baik and Silverstein(2006)]{BaikSilverstein2006}
 Baik, J. and Silverstein, J.~W. (2006).
 Eigenvalues of large sample covariance matrices of spiked population models.
@@ -1372,6 +1385,12 @@ Bolin, D. and Kirchner, K. (2023).
 Equivalence of measures and asymptotically optimal linear prediction for Gaussian random fields with fractional-order covariance operators.
 \emph{Bernoulli}, 29(2), 1476--1504.
 doi:10.3150/22-BEJ1507.
+
+\bibitem[Bose et~al.(2018)Bose, Hodges, and Banerjee]{Bose2018}
+Bose, M., Hodges, J.~S., and Banerjee, S. (2018).
+Toward a diagnostic toolkit for linear models with Gaussian-process distributed random effects.
+\emph{Biometrics}, 74(3), 863--873.
+doi:10.1111/biom.12848.
 
 \bibitem[Carere and Lie(2026)]{CarereLie2026}
 Carere, G. and Lie, H.~C. (2026).
@@ -1418,12 +1437,34 @@ Kaufman, C.~G. and Shaby, B.~A. (2013).
 The role of the range parameter for estimation and prediction in geostatistics.
 \emph{Biometrika}, 100(2), 473--484.
 
+\bibitem[Karvonen and Oates(2023)]{KarvonenOates2023}
+Karvonen, T. and Oates, C.~J. (2023).
+Maximum likelihood estimation in Gaussian process regression is ill-posed.
+\emph{Journal of Machine Learning Research}, 24(120), 1--47.
+
+\bibitem[Krock et~al.(2021)Krock, Kleiber, and Becker]{Krock2021}
+Krock, M., Kleiber, W., and Becker, S. (2021).
+Nonstationary modeling with sparsity for spatial data via the basis graphical lasso.
+\emph{Journal of Computational and Graphical Statistics}, 30(2), 375--389.
+doi:10.1080/10618600.2020.1811103.
+
+\bibitem[LeDuc et~al.(2026)LeDuc, Kleiber, and Matsuo]{LeDuc2026}
+LeDuc, M., Kleiber, W., and Matsuo, T. (2026).
+Modeling large nonstationary spatial data with the full-scale basis graphical lasso.
+\emph{Spatial Statistics}, 74, 101007.
+doi:10.1016/j.spasta.2026.101007.
+
 \bibitem[Lim et~al.(2025)]{Lim2025}
 Lim, J.~H., Kovachki, N.~B., Baptista, R., Beckham, C., Azizzadenesheli, K.,
 Kossaifi, J., Voleti, V., Song, J., Kreis, K., Kautz, J., Pal, C.,
 Vahdat, A., and Anandkumar, A. (2025).
 Score-based diffusion models in function space.
 \emph{Journal of Machine Learning Research}, 26(158), 1--62.
+
+\bibitem[Lin et~al.(2026)Lin, Ament, Tiao, Eriksson, Balandat, and Bakshy]{Lin2026}
+Lin, J.~A., Ament, S., Tiao, L.~C., Eriksson, D., Balandat, M., and Bakshy, E. (2026).
+Empirical Gaussian processes.
+\emph{arXiv preprint arXiv:2602.12082}.
 
 \bibitem[Lindgren et~al.(2011)Lindgren, Rue, and Lindstr\"om]{Lindgren2011}
 Lindgren, F., Rue, H., and Lindstr\"om, J. (2011).
@@ -1439,28 +1480,34 @@ doi:10.1016/j.spasta.2022.100599.
 \bibitem[Llamazares-Elias et~al.(2026)Llamazares-Elias, Latz, and Lindgren]{LlamazaresElias2026}
 Llamazares-Elias, L., Latz, J., and Lindgren, F. (2026).
 A parameterization of anisotropic Gaussian fields with penalized complexity priors.
-\emph{Journal of the American Statistical Association}.
+\emph{Journal of the American Statistical Association}, published online.
 doi:10.1080/01621459.2026.2670016.
 
-\bibitem[Marchenko and Pastur(1967)]{MarchenkoPastur1967}
-Marchenko, V.~A. and Pastur, L.~A. (1967).
+\bibitem[Mar\v{c}enko and Pastur(1967)]{MarchenkoPastur1967}
+Mar\v{c}enko, V.~A. and Pastur, L.~A. (1967).
 Distribution of eigenvalues for some sets of random matrices.
 \emph{Mathematics of the USSR-Sbornik}, 1(4), 457--483.
+doi:10.1070/SM1967v001n04ABEH001994.
 
 \bibitem[Petersson and Schroers(2025)]{PeterssonSchroers2025}
 Petersson, A. and Schroers, D. (2025).
 Nonparametric inference for noise covariance kernels in parabolic SPDEs using space-time infill asymptotics.
 \emph{arXiv preprint arXiv:2508.20947}.
 
-\bibitem[Pidstrigach et~al.(2023)Pidstrigach, Marzouk, Reich, and Wang]{Pidstrigach2023}
-Pidstrigach, J., Marzouk, Y., Reich, S., and Wang, S. (2023).
+\bibitem[Pidstrigach et~al.(2024)Pidstrigach, Marzouk, Reich, and Wang]{Pidstrigach2024}
+Pidstrigach, J., Marzouk, Y., Reich, S., and Wang, S. (2024).
 Infinite-dimensional diffusion models.
-\emph{arXiv preprint arXiv:2302.10130}.
+\emph{Journal of Machine Learning Research}, 25(414), 1--52.
 
 \bibitem[Sang and Huang(2012)]{SangHuang2012}
 Sang, H. and Huang, J.~Z. (2012).
 A full scale approximation of covariance functions for large spatial data sets.
 \emph{Journal of the Royal Statistical Society: Series B}, 74(1), 111--132.
+
+\bibitem[Sikorski et~al.(2025)Sikorski, Ivanitskiy, Lenssen, Nychka, and McKenzie]{Sikorski2025}
+Sikorski, A., Ivanitskiy, M., Lenssen, N., Nychka, D., and McKenzie, D. (2025).
+LatticeVision: image to image networks for modeling non-stationary spatial data.
+\emph{arXiv preprint arXiv:2505.09803}.
 
 \bibitem[Simpson et~al.(2017)Simpson, Rue, Riebler, Martins, and S{\o}rbye]{Simpson2017}
 Simpson, D., Rue, H., Riebler, A., Martins, T.~G., and S{\o}rbye, S.~H. (2017).
@@ -1473,10 +1520,17 @@ Stein, M.~L. (1999).
 \emph{Interpolation of Spatial Data: Some Theory for Kriging}.
 Springer, New York.
 
+\bibitem[Wiens et~al.(2020)Wiens, Nychka, and Kleiber]{Wiens2020}
+Wiens, A., Nychka, D., and Kleiber, W. (2020).
+Modeling spatial data using local likelihood estimation and a Mat\'ern to spatial autoregressive translation.
+\emph{Environmetrics}, 31(6), e2652.
+doi:10.1002/env.2652.
+
 \bibitem[Zhang(2004)]{Zhang2004}
 Zhang, H. (2004).
 Inconsistent estimation and asymptotically equal interpolations in model-based geostatistics.
 \emph{Journal of the American Statistical Association}, 99(465), 250--261.
+doi:10.1198/016214504000000241.
 
 \end{thebibliography}
 }
