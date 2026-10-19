@@ -1043,6 +1043,60 @@ M5 is not intended to replace the lower-order model. On B$'$, CV selects $r=0$ a
 \end{figure}
 
 \FloatBarrier
+\subsection{A one-dimensional analytic check: strain hardening}
+\label{sec:hardening}
+
+The classification can be checked exactly in one dimension. Let $\sigma(p)$ be the flow stress at plastic strain $p\in[0,P]$, $P=0.3$, with Kocks--Mecking stage III hardening driven by random kicks as the reference,
+\begin{equation}
+    d\sigma=\big[\theta_0-\beta(\sigma-\sigma_0)\big]\,dp+\sqrt{D}\,dW,
+    \qquad
+    \sigma(0)=\sigma_0,
+    \label{eq:km_reference}
+\end{equation}
+whose mean is the Voce curve; $\sigma_0=200$\,MPa, $\beta=10$, $\theta_0=1500$\,MPa and $D=18000$\,MPa$^2$, so the stationary residual sd is $30$\,MPa. Each upgrade changes one term (Table~\ref{tab:hardening}), with $\theta_{IV}=200$\,MPa; $s$ is a smooth step from $0$ to $1$ on $[0.14,0.16]$ and $w$ a smooth bump equal to $1$ on $[0.1,0.2]$. U1 to U3 start from $\sigma(0)=\sigma_0$; U4 compares stationary residuals about the Voce mean. Every model is a linear SDE, so the KL between the values on $K$ evenly spaced knots is computed exactly from Gaussian transitions. For a change of drift at fixed $D$, Girsanov's theorem gives the continuum value
+\begin{equation}
+    \mathrm{KL}=\frac12\int_0^P\frac{\mathbb E_1\big[(a_1-a_0)^2\big]}{D}\,dp,
+    \label{eq:girsanov}
+\end{equation}
+where $a_0$ and $a_1$ are the drifts of the reference and the upgrade and $\mathbb E_1$ is the expectation under the upgrade, with $a_1-a_0=\theta_{IV}s(p)$ for U1 and $-(\beta(p)-\beta)(\sigma-\sigma_0)$ for U2.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Upgrades of the hardening reference \eqref{eq:km_reference} and their KL against it per curve, in nats.}
+\label{tab:hardening}
+\fitbox{\begin{tabular}{@{}llllrr@{}}
+\toprule
+ & Upgrade & Change & Class & $K=25$ & $K=800$\\
+\midrule
+U1 & stage IV & drift $+\,\theta_{IV}s(p)$ & in (source) & 0.1639 & 0.1646\\
+U2 & recovery law & $\beta\to\beta(1+0.5\,w(p))$ & in (lower order) & 0.7683 & 0.7800\\
+U3 & kick intensity & $D\to D(1+w(p))$ & out (amplitude) & 1.42 & 47.8\\
+U4 & smoothness & OU residual $\to$ Mat\'ern-$3/2$ & out (order) & 37.5 & 3976\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+The in-class upgrades are flat in $K$ and reach the Girsanov values $0.16457$ and $0.78002$ to within $2\times10^{-5}$ at $K=800$, while the out-of-class ones grow with log--log slopes $1.00$ (U3) and $1.26$ (U4) for $K\ge100$ (Figure~\ref{fig:classify}). U1 is a deterministic mean shift and stays in class through the Cameron--Martin condition. U3 enters on the source side yet leaves the class, which is the one-dimensional form of the amplitude case \eqref{eq:amplitude}: a spatially varying kick intensity is not a drift change, so no Girsanov density exists. U4 raises the order of the operator, so the paths become differentiable and each knot adds of order $\log K$ nats, hence the slope above one.
+
+Reach matters more than replication for the in-class upgrade U1. Curves that stop before the step begins carry no stage IV evidence for any number of curves, and $100$ curves observed to $p=0.15$ give $0.05$ nats against $0.165$ nats from a single curve observed to $p=0.3$.
+
+The cost of an out-of-class mismatch appears when a library prior is learned from replicates. Twenty Mat\'ern-$3/2$ residual curves on $[0,0.3]$ were fitted by maximum likelihood with an OU model, an OU model with a nugget, and a Mat\'ern model whose smoothness $\nu\in\{1/2,3/2,5/2\}$ is also estimated (Figure~\ref{fig:library}). As the knots are refined from $K=10$ to $K=300$, the OU fit drives its range from about $0.7$ to about $20$ strain, its prior sd for the change over $0.1$ strain falls from $15.7$ to $3.1$\,MPa against a true $21.8$\,MPa, and the coverage of its nominal $90\%$ interval at $p=0.4$ falls from $0.74$ to $0.19$; the fitted nugget is zero and changes nothing. The learned $\nu$ is $3/2$ at every $K$, its band stays within $5\%$ of the truth, and its coverage stays at $0.93$. A fixed Mat\'ern-$5/2$, too smooth rather than too rough, also fails: its coverage falls from $0.95$ to $0.72$.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.6\linewidth]{figures/fig_classify.png}
+\caption{Exact KL per curve between each upgrade and the hardening reference against the number of knots. Dashed lines: Girsanov values for U1 and U2.}
+\label{fig:classify}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_library.png}
+\caption{Library prior learned from twenty Mat\'ern-$3/2$ curves. Left: prior sd of the change over $0.1$ strain against $K$ (error bars: delta-method sd of the learned-$\nu$ fit). Right: held-out coverage of the nominal $90\%$ interval at $p=0.4$. The OU and OU-plus-nugget curves coincide.}
+\label{fig:library}
+\end{figure}
+
 \subsection{Robustness}
 \label{sec:robustness}
 

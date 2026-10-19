@@ -32,6 +32,8 @@ is needed.
 | `figures/fig5_2_sample_vs_oracle.pdf` | Figure 5.1, sample diagnostic vs oracle |
 | `figures/fig5_3_misattribution.pdf` | Figure 5.2, misattribution by wrong-class models |
 | `figures/fig5_4_m5_selectivity.png` | Figure 5.3, M5 selectivity |
+| `figures/fig_classify.png` | Figure 5.4, hardening example: KL against the number of knots |
+| `figures/fig_library.png` | Figure 5.5, hardening example: library prior band and coverage |
 | `build.sh` | three-pass `pdflatex` build into `build/`, copies the PDF back |
 
 The code, data and result files that produced the numbers and figures are not part of this repository.
